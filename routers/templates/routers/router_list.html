@@ -1,0 +1,50 @@
+{% extends 'base.html' %} {% block title %}Routers List{% endblock %} 
+{% block content %}
+<div class="container">
+  <h2 class="mb-4">Routers List</h2>
+  
+
+  <table class="table table-bordered table-striped">
+    <thead class="table-dark">
+      <tr>
+        <th>MAC Address</th>
+        <th>Status</th>
+        <th>Location</th>
+        <th>Contact</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for router in routers %}
+      <tr>
+        <td>{{ router.mac_address }}</td>
+        <td>
+          <span
+            class="badge {% if router.status == 'Active' %}bg-success{% else %}bg-danger{% endif %}"
+          >
+            {{ router.status }}
+          </span>
+        </td>
+        <td>{{ router.location }}</td>
+        <td>{{ router.phone_number }}</td>
+        <td>
+          <a
+            href="{% url 'router_details' router.id %}"
+            class="btn btn-info btn-sm"
+            >View More</a
+          >
+          <form
+            method="post"
+            action="{% url 'api_reboot_router' router.id %}"
+            class="d-inline"
+          >
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger btn-sm">Reboot</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

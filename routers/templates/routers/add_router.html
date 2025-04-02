@@ -1,0 +1,18 @@
+{% extends 'base.html' %} {% block title %}Add Router{% endblock %} 
+{% block content %}
+<div class="container">
+  <h2>Add Router</h2>
+  <div class="card">
+    <div class="card-body">
+      <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">{{ form.as_p }}</div>
+        <button type="submit" class="btn btn-primary">Add Router</button>
+      </form>
+    </div>
+  </div>
+  <a href="{% url 'router_list' %}" class="btn btn-secondary mt-3"
+    >Back to Router List</a
+  >
+</div>
+{% endblock %}
