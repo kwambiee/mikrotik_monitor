@@ -1,0 +1,79 @@
+{% extends 'base.html' %} 
+{% block title %}Edit Router{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h2>Edit Router</h2>
+  
+  <div class="card">
+    <div class="card-body">
+      <form method="post">
+        {% csrf_token %}
+        
+        <!-- Display the router details form -->
+        <div class="mb-3">
+          <label for="mac_address" class="form-label">Mac Address</label>
+          <input type="text" class="form-control" id="mac_address" name="mac_address" value="{{ router.mac_address }}" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="username" class="form-label">Router Model</label>
+          <input type="text" class="form-control" id="username" name="username" value="{{ router.username }}" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input type="text" class="form-control" id="password" name="password" value="{{ router.password }}" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="location" class="form-label">Location </label>
+          <input type="text" class="form-control" id="location" name="location" value="{{ router.location }}" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="phone_number" class="form-label">Phone Number</label>
+          <input type="text" class="form-control" id="phone_number" name="phone_number" value="{{ router.phone_number }}" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="description" class="form-label"> Description</label>
+          <input type="text" class="form-control" id="description" name="description" value="{{ router.description }}" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="status" class="form-label">Status</label>
+          <select class="form-control" id="status" name="status">
+            <option value="online" {% if router.status == 'online' %}selected{% endif %}>Online</option>
+            <option value="offline" {% if router.status == 'offline' %}selected{% endif %}>Offline</option>
+            <option value="reset" {% if router.status == 'reset' %}selected{% endif %}>Reset</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="router_type" class="form-label">Router Type</label>
+          <select class="form-control" id="router_type" name="router_type">
+            <option value="head" {% if router.router_type == 'head' %}selected{% endif %}>Head</option>
+            <option value="tail" {% if router.router_type == 'tail' %}selected{% endif %}>Tail</option>
+            <option value="intermediate" {% if router.router_type == 'intermediate' %}selected{% endif %}>Intermediate</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="parent_router" class="form-label">Parent Router</label>
+            <select class="form-control" id="parent_router" name="parent_router">
+                <option value="" {% if router.parent_router == None %}selected{% endif %}>None</option>
+                {% for parent in routers %}
+                <option value="{{ parent.id }}" {% if router.parent_router == parent.id %}selected{% endif %}>{{ parent.mac_address }}</option>
+                {% endfor %}
+            </select>
+        </div> 
+        
+        <button type="submit" class="btn btn-primary">Update Router</button>
+      </form>
+    </div>
+  </div>
+
+  <a href="{% url 'router_details' router.id %}" class="btn btn-secondary mt-3">Back to Router Details</a>
+</div>
+{% endblock %}

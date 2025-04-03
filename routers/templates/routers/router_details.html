@@ -1,38 +1,50 @@
-{% extends 'base.html' %} {% block title %}Router Details{% endblock %} 
-{% block content %}
-<div class="container">
-  <h2>Router Details</h2>
-  <div class="card">
-    <div class="card-body">
-      <p><strong>MAC Address:</strong> {{ router.mac_address }}</p>
-      <p><strong>Router UserName:</strong> {{ router.mac_address }}</p>
-      <p><strong>Router Password:</strong> {{ router.mac_address }}</p>
+{% extends 'base.html' %}
+{% block title %}Router Details{% endblock %}
 
-      <p>
-        <strong>Status:</strong>
-        <span
-          class="badge {% if router.status == 'Online' %}bg-success{% else %}bg-danger{% endif %}"
-        >
-          {{ router.status }}
-        </span>
-      </p>
-      <p><strong>Location:</strong> {{ router.location }}</p>
-      <p><strong>Contact Number:</strong> {{ router.phone_number }}</p>
-      <p><strong>Last Checked:</strong> {{ router.last_checked }}</p>
-      <p><strong>Description:</strong> {{ router.description }}</p>
-      <p><strong>Last Reset:</strong> {{ router.last_reset }}</p>
-      <p><strong>Last Checked:</strong> {{ router.last_checked }}</p>
-      <p><strong>Router Type:</strong> {{ router.last_reset }}</p>
-      <p><strong>Parent Router:</strong> {{ router.last_reset }}</p>
-      <p><strong>Children Router:</strong> {{ router.children.all() }}</p>
-      <form method="post" action="{% url 'api_reboot_router' router.id %}">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-danger">Reboot Router</button>
-      </form>
+{% block content %}
+<div class="container my-5">
+  <h2 class="mb-4 text-center">Router Details</h2>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h5 class="card-title">Router Information</h5>
+      <div class="row">
+        <div class="col-md-6">
+          <p><strong>MAC Address:</strong> {{ router.mac_address }}</p>
+          <p><strong>Router Model:</strong> {{ router.username }}</p>
+          <p><strong>Router Password:</strong> {{ router.password }}</p>
+          <p><strong>Location:</strong> {{ router.location }}</p>
+          <p><strong>Contact Number:</strong> {{ router.phone_number }}</p>
+        </div>
+
+        <div class="col-md-6">
+          <p>
+            <strong>Status:</strong>
+            <span class="badge {% if router.status == 'Online' %}bg-success{% else %}bg-danger{% endif %}">
+              {{ router.status }}
+            </span>
+          </p>
+          <p><strong>Last Checked:</strong> {{ router.last_checked }}</p>
+          <p><strong>Description:</strong> {{ router.description }}</p>
+          <p><strong>Last Reset:</strong> {{ router.last_reset }}</p>
+          <p><strong>Router Type:</strong> {{ router.router_type }}</p>
+        </div>
+      </div>
+
+      <hr>
+
+      <div class="d-flex justify-content-between align-items-center">
+        <form method="post" action="{% url 'api_reboot_router' router.id %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger">Reboot Router</button>
+        </form>
+        <a href="{% url 'edit_router' router.id %}" class="btn btn-primary">Edit Router</a>
+      </div>
     </div>
   </div>
-  <a href="{% url 'router_list' %}" class="btn btn-secondary mt-3"
-    >Back to Router List</a
-  >
+
+  <div class="mt-3">
+    <a href="{% url 'router_list' %}" class="btn btn-secondary">Back to Router List</a>
+  </div>
 </div>
 {% endblock %}

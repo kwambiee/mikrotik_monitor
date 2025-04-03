@@ -2,12 +2,15 @@
 {% block content %}
 <div class="container">
   <h2 class="mb-4">Routers List</h2>
-  
+ 
 
   <table class="table table-bordered table-striped">
     <thead class="table-dark">
       <tr>
+        <th>Router ID</th>
         <th>MAC Address</th>
+        <th>Router Model</th>
+        <th>Router Type</th>
         <th>Status</th>
         <th>Location</th>
         <th>Contact</th>
@@ -15,12 +18,21 @@
       </tr>
     </thead>
     <tbody>
-      {% for router in routers %}
+      {% for router in page_obj %}
       <tr>
+        <td>{{ router.id }}</td>
         <td>{{ router.mac_address }}</td>
+        <td>{{ router.username }}</td>
+        <td>
+          {% if router.router_type %}
+          {{ router.router_type }}
+          {% else %}
+          <span class="text-muted">N/A</span>
+          {% endif %}
+        </td>
         <td>
           <span
-            class="badge {% if router.status == 'Active' %}bg-success{% else %}bg-danger{% endif %}"
+            class="badge {% if router.status == 'online' %}bg-success{% else %}bg-danger{% endif %}"
           >
             {{ router.status }}
           </span>
@@ -46,5 +58,42 @@
       {% endfor %}
     </tbody>
   </table>
+
+  {% comment %} pagination Controls {% endcomment %}
+  <div>
+    <nav aria-label="Page navigation">
+      <ul class="pagination">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?page=1">First</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        </li>
+        {% endif %}
+
+        {% for i in page_obj.paginator.page_range %}
+        {% if page_obj.number == i %}
+        <li class="page-item active">
+          <span class="page-link">{{ i }}</span>
+        </li>
+        {% else %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+        </li>
+        {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+        </li>
+        {% endif %}
+      </ul>
+    </nav>
+  </div>
 </div>
 {% endblock %}
