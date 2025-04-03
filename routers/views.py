@@ -82,9 +82,8 @@ def edit_router(request, id):
             messages.success(request, "Router updated successfully!")
             return redirect('router_details', id=router.id)  # Redirect to the updated router details page
         else:
-            print(form.errors, "---- form errors.... ")
             messages.error(request, "Invalid form submission.")
-            # form = RouterForm(instance=router)  # Pre-populate the form with the current router data
+            print(form.errors, "---- form errors.... ")
     else:
         print("---- form is not valid.... ")
         messages.error(request, "Invalid form submission.")
