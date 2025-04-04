@@ -46,17 +46,29 @@ def add_router(request):
 
     return render(request, 'routers/add_router.html', {'form': form})
 
-def router_list(request):
-    routers = Router.objects.all().order_by('-id')  # Fetch routers and order them
 
-    # Paginate with 10 routers per page
+    
+def router_list(request):
+    routers = Router.objects.all().order_by('-id')  
+
+    mac_address = request.GET.get('mac_address')
+    phone_number = request.GET.get('phone_number')
+    status = request.GET.get('status')
+
+    if mac_address:
+        routers = routers.filter(mac_address__icontains=mac_address)
+    if phone_number:
+        routers = routers.filter(phone_number__icontains=phone_number)
+    if status:
+        routers = routers.filter(status=status)
+
     paginator = Paginator(routers, 10)  
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+    page = request.GET.get('page')
+    page_obj = paginator.get_page(page)
 
     return render(request, 'routers/router_list.html', {
         'page_obj': page_obj,
-        'total_count': routers.count(),  # Total number of routers
+        'total_count': routers.count(),  
     })
 
 def router_details(request, id):

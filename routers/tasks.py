@@ -1,6 +1,7 @@
 import os
 import routeros_api
 from celery import shared_task
+from .utils import fetch_active_routers
 
 @shared_task
 def monitor_router(mac_address):
@@ -54,3 +55,11 @@ def reboot_router(mac_address):
     
     except Exception as e:
         return f"Failed to reboot router {mac_address}: {str(e)}"
+
+@shared_task
+def update_router_list():
+    """
+    Scheduled Celery task to fetch and update the router list from the network.
+    Runs three times a day.
+    """
+    fetch_active_routers()

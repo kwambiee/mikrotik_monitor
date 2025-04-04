@@ -2,6 +2,27 @@
 {% block content %}
 <div class="container">
   <h2 class="mb-4">Routers List</h2>
+  
+  <form method="get" class="row g-3 mb-4">
+  <div class="col-md-3">
+    <input type="text" name="mac_address" class="form-control" placeholder="MAC Address" value="{{ request.GET.mac_address }}">
+  </div>
+  <div class="col-md-3">
+    <input type="text" name="phone_number" class="form-control" placeholder="Phone Number" value="{{ request.GET.phone_number }}">
+  </div>
+  <div class="col-md-3">
+    <select name="status" class="form-select">
+      <option value="">All Status</option>
+      <option value="online" {% if request.GET.status == "online" %}selected{% endif %}>Online</option>
+      <option value="offline" {% if request.GET.status == "offline" %}selected{% endif %}>Offline</option>
+      <option value="reset" {% if request.GET.status == "reset" %}selected{% endif %}>Reset</option>
+    </select>
+  </div>
+  <div class="col-md-3">
+    <button type="submit" class="btn btn-primary w-100">Filter</button>
+  </div>
+</form>
+
  
 
   <table class="table table-bordered table-striped">
