@@ -139,7 +139,11 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CELERY_BROKER_URL = os.getenv('REDIS_URL')
+import os
+
+CELERY_BROKER_URL = "redis://default:ASk7AAIjcDFlMTBjOGQzYzhlNTI0M2NhYWRhMDY1NWRjNDVlM2U2NXAxMA@free-sunbeam-10555.upstash.io:6379"
+CELERY_RESULT_BACKEND = "redis://default:ASk7AAIjcDFlMTBjOGQzYzhlNTI0M2NhYWRhMDY1NWRjNDVlM2U2NXAxMA@free-sunbeam-10555.upstash.io:6379"
+
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 
