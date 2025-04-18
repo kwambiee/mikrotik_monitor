@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: mikrotik-monitor-web
+    env: python
+    buildCommand: |
+      pip install -r requirements.txt
+      python manage.py migrate
+      python manage.py collectstatic --noinput
+    startCommand: gunicorn mikrotik_monitor.wsgi:application --bind 0.0.0.0:$PORT
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: mikrotik_monitor.settings
+      - key: ALLOWED_HOSTS
+        value: mikrotik-monitor.onrender.com
+
+  - type: worker
+    name: mikrotik-monitor-worker
+    env: python
+    startCommand: celery -A mikrotik_monitor worker --loglevel=info
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: mikrotik_monitor.settings
