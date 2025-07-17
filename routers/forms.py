@@ -30,17 +30,17 @@ class RouterForm(forms.ModelForm):
             'router_type': 'Router Type',
             'parent_router': 'Parent Router'
         }
-        help_texts = {
-            'mac_address': 'Format: XX:XX:XX:XX:XX:XX',
-            'username': 'Login username for the router',
-            'password': 'Login password for the router',
-            'location': 'Physical location of the router',
-            'phone_number': 'Contact phone number of the router admin',
-            'status': 'Current status of the router',
-            'description': 'Any additional notes about the router',
-            'router_type': 'Specify if it is a head, intermediate, or tail router',
-            'parent_router': 'Select the parent router (if applicable)'
-        }
+        # help_texts = {
+        #     'mac_address': 'Format: XX:XX:XX:XX:XX:XX',
+        #     'username': 'Contact Name',
+        #     'password': 'Login password for the router',
+        #     'location': 'Physical location of the router',
+        #     'phone_number': 'Contact phone number of the router admin',
+        #     'status': 'Current status of the router',
+        #     'description': 'Any additional notes about the router',
+        #     'router_type': 'Specify if it is a head, intermediate, or tail router',
+        #     'parent_router': 'Select the parent router (if applicable)'
+        # }
         error_messages = {
             'mac_address': {
                 'required': 'MAC Address is required',

@@ -49,11 +49,16 @@ def add_router(request):
 
     
 def router_list(request):
-    routers = Router.objects.all().order_by('-id')  
+    routers = Router.objects.all()  
 
     mac_address = request.GET.get('mac_address')
     phone_number = request.GET.get('phone_number')
     status = request.GET.get('status')
+    router_model = request.GET.get('username')
+    
+    # Get sorting parameters
+    sort_by = request.GET.get('sort', 'id')  # Default sort by id
+    order = request.GET.get('order', 'asc')   # Default order
 
     if mac_address:
         routers = routers.filter(mac_address__icontains=mac_address)
@@ -61,6 +66,13 @@ def router_list(request):
         routers = routers.filter(phone_number__icontains=phone_number)
     if status:
         routers = routers.filter(status=status)
+    if router_model:
+        routers = routers.filter(username__icontains=router_model)
+         
+    # Apply sorting
+    if order == 'desc':
+        sort_by = f'-{sort_by}'
+    routers = routers.order_by(sort_by)
 
     paginator = Paginator(routers, 10)  
     page = request.GET.get('page')

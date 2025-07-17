@@ -3,7 +3,7 @@ from .models import Router
 from dotenv import load_dotenv
 import routeros_api
 
-load_dotenv()
+load_dotenv(override=True)
 
 def fetch_active_routers():
     """
@@ -13,16 +13,17 @@ def fetch_active_routers():
     host = os.getenv('MIKROTIK_HOST')
     username = os.getenv('MIKROTIK_USERNAME')
     password = os.getenv('MIKROTIK_PASSWORD')
+    port = os.getenv('MIKROTIK_PORT')
     
     print(f"🔌 Connecting to {host} with user {username}...")
 
-    if not all([host, username, password]):
+    if not all([host, username, password, port]):
         print("❌ Error: Missing required environment variables for MikroTik connection.")
         return
 
     try:
         connection = routeros_api.RouterOsApiPool(
-            host=host, username=username, password=password, port=8728, plaintext_login=True
+            host=host, username=username, password=password, port=int(port), plaintext_login=True
         )
         api = connection.get_api()
         leases = api.get_resource('/ip/dhcp-server/lease').get()
@@ -70,3 +71,17 @@ def fetch_active_routers():
 
     except Exception as e:
         print(f"❌ Error: {e}")
+
+
+def wispman_login():
+    """
+    Logs into WISPManager and fetches the list of routers.
+    """
+    host = os.getenv('WISPMAN_HOST')
+    username = os.getenv('WISPMAN_USERNAME')
+    password = os.getenv('WISPMAN_PASSWORD')
+    print(f"🔌 Connecting to {host} with user {username}...")
+    if not all([host, username, password]):
+        print("❌ Error: Missing required environment variables for WISPManager connection.")
+        return
+    

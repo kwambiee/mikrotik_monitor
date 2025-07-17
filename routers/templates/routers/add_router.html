@@ -2,15 +2,33 @@
 {% block content %}
 <div class="container">
   <h2>Add Router</h2>
-  <div class="card">
-    <div class="card-body">
-      <form method="post">
-        {% csrf_token %}
-        <div class="mb-3">{{ form.as_p }}</div>
-        <button type="submit" class="btn btn-primary">Add Router</button>
-      </form>
+  <div class="container mt-4">
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Add Router</h5>
+      </div>
+      <div class="card-body">
+        <form method="post" class="row g-3">
+          {% csrf_token %} {% for field in form %}
+          <div class="col-md-8">
+            <label for="{{ field.id_for_label }}" class="form-label">
+              {{ field.label }}
+            </label>
+            {{ field }} {% if field.help_text %}
+            <div class="form-text text-muted">{{ field.help_text }}</div>
+            {% endif %} {% for error in field.errors %}
+            <div class="text-danger small">{{ error }}</div>
+            {% endfor %}
+          </div>
+          {% endfor %}
+          <div class="col-12 mt-3">
+            <button type="submit" class="btn btn-primary">Add Router</button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
+
   <a href="{% url 'router_list' %}" class="btn btn-secondary mt-3"
     >Back to Router List</a
   >

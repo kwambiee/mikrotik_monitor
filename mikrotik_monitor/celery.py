@@ -1,6 +1,9 @@
 import os
 from celery.schedules import crontab
 from celery import Celery
+from dotenv import load_dotenv
+
+load_dotenv()
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mikrotik_monitor.settings')
 
@@ -15,3 +18,6 @@ app.conf.beat_schedule = {
 }
 
 app.autodiscover_tasks()
+
+# Explicit broker setting
+app.conf.broker_url = os.getenv('CELERY_BROKER_URL')

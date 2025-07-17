@@ -11,13 +11,14 @@ def monitor_router(mac_address):
     host = os.getenv('MIKROTIK_HOST')
     username = os.getenv('MIKROTIK_USERNAME')
     password = os.getenv('MIKROTIK_PASSWORD')
+    port = os.getenv('MIKROTIK_PORT')
 
     try:
         connection = routeros_api.RouterOsApiPool(
             host=host,
             username=username,
             password=password,
-            port=8728,
+            port=int(port),
             plaintext_login=True
         )
         api = connection.get_api()
@@ -40,13 +41,14 @@ def reboot_router(mac_address):
     host = os.getenv('MIKROTIK_HOST')
     username = os.getenv('MIKROTIK_USERNAME')
     password = os.getenv('MIKROTIK_PASSWORD')
+    port = os.getenv('MIKROTIK_PORT')
 
     try:
         connection = routeros_api.RouterOsApiPool(
             host=host,
             username=username,
             password=password,
-            port=8728,
+            port=int(port),
             plaintext_login=True
         )
         api = connection.get_api()

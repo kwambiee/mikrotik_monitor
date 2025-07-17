@@ -14,6 +14,9 @@ from pathlib import Path
 import os
 import dj_database_url
 from dotenv import load_dotenv
+from redis import ConnectionPool
+import redis
+import ssl
 
 load_dotenv()
 
@@ -45,7 +48,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'routers', 
-    'livereload'
+    'livereload',
+    'compressor',
 ]
 
 MIDDLEWARE = [
@@ -134,15 +138,36 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+COMPRESS_ROOT = BASE_DIR / 'static'
+
+COMPRESS_ENABLED = True
+
+STATICFILES_FINDERS = ('compressor.finders.CompressorFinder',)
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-import os
+pool = ConnectionPool(
+    host=os.getenv('REDIS_HOST'),
+    port=int(os.getenv('REDIS_PORT')),
+    password=os.getenv('REDIS_PASSWORD'),
+    connection_class=redis.SSLConnection,
+    ssl_cert_reqs=ssl.CERT_NONE  # Use CERT_REQUIRED for production
+)   
 
-CELERY_BROKER_URL = "redis://default:ASk7AAIjcDFlMTBjOGQzYzhlNTI0M2NhYWRhMDY1NWRjNDVlM2U2NXAxMA@free-sunbeam-10555.upstash.io:6379/0"
-CELERY_RESULT_BACKEND = "redis://default:ASk7AAIjcDFlMTBjOGQzYzhlNTI0M2NhYWRhMDY1NWRjNDVlM2U2NXAxMA@free-sunbeam-10555.upstash.io:6379/0"
+redis_instance = redis.Redis(connection_pool=pool)
+
+print("Redis connection established:", redis_instance.ping())
+
+
+CELERY_BROKER_URL = 'rediss://default:' + os.getenv('REDIS_PASSWORD', '') + '@' + os.getenv('REDIS_HOST', 'localhost') + ':' + str(os.getenv('REDIS_PORT', 6379)) + '/0' + '?ssl_cert_reqs=none'
+
+
+
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', CELERY_BROKER_URL)
+CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND', CELERY_BROKER_URL)
 
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
